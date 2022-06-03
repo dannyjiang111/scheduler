@@ -6,6 +6,8 @@ export default function Form (props) {
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
+  console.log("interview---->",props.value)
+  
   const Reset = () => {
     setStudent("");
     setInterviewer(null);

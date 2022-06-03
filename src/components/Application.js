@@ -15,14 +15,6 @@ export default function Application(props) {
     cancelInterview
   } = useApplicationData();
 
-   const {
-    state,
-    setState,
-    setDay,
-    bookInterview,
-    cancelInterview
-  } = useApplicationData();
-
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   const arrOfAppt = dailyAppointments.map((appointment) => {
@@ -38,6 +30,8 @@ export default function Application(props) {
       cancelInterview ={cancelInterview}
     /> )
   }) 
+
+  if (arrOfAppt.length > 0) arrOfAppt.push(<Appointment key="last" time="5pm"/>)
 
   useEffect(() => {
     Promise.all([

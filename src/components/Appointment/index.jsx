@@ -44,10 +44,11 @@ export default function Appointment (props) {
     };
 
     transition(DELETING, true);
-
-    props.cancelInterview(props.id, interview)
-      .then(() => (transition(EMPTY)))
-      .catch((err) => (transition(ERROR_DELETE, true)));
+    
+    props.cancelInterview(props.id)
+    .then(() => (transition(EMPTY)))
+    .catch((err) => (transition(ERROR_DELETE, true)));
+    
   };
 
   return (

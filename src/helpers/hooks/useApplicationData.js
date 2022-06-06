@@ -15,11 +15,17 @@ export default function useApplicationData () {
       [id]: appointment
     };
 
-    // if (!prevAppointment.interview) updateSpots(id, false);
+    const updatedDays = updateSpots(id, false)
 
     return axios.put(`/api/appointments/${id}`, {interview})
     .then(() => {
-      if (!prevAppointment.interview) { updateSpots(id, false) }
+      if (!prevAppointment.interview) { 
+        return setState({
+          ...state,
+          appointments: appointments,
+          days: updatedDays
+        }) 
+       }
       setState({
         ...state,
         appointments: appointments,
@@ -36,7 +42,7 @@ export default function useApplicationData () {
     interviewers: []
   })
 
-  function cancelInterview(id, interview) {
+  function cancelInterview(id) {
 
     const appointment = {
       ...state.appointments[id],
@@ -48,20 +54,23 @@ export default function useApplicationData () {
       [id]: appointment
     };
 
-    return axios.delete(`/api/appointments/${id}`, {id : {interview}})
-      .then(
-        updateSpots(id, true),
-        setState({
+    return axios.delete(`/api/appointments/${id}`)
+    .then( () => {
+      const updatedDays = updateSpots(id, true)
+      setState({
          ...state,
          appointments: appointments,
+         days: updatedDays
         })
-      )
+    })
   }
 
   function updateSpots(id, increase) {
+    const dayIndex = state.days.find(d => state.day === d.name);
+    let spots = dayIndex.spots
 
-    const dayIndex = state.days.findIndex(d => state.day === d.name);
-    let spots = state.days[dayIndex].spots
+    // const dayIndex = state.days.find(d => state.day === d.name);
+    // let spots = dayIndex.spots
 
     if (increase) {
       spots++
@@ -70,15 +79,20 @@ export default function useApplicationData () {
     }
 
     const day = {
-      ...state.days[dayIndex], 
+      ...dayIndex,  
       spots: spots
     }
 
-    let days = state.days
+    let days = state.days.map((e) => {
+      if(e.name === day.name) {
+        return day;
+      } 
+      return e;
+    })
 
-    days[dayIndex]=day
-
-    setState({...state, days})
+     // setState({...state, days})
+     console.log(days);
+     return days;
   }
 
   return {state, setState, setDay, bookInterview, cancelInterview}

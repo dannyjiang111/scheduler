@@ -7,31 +7,19 @@ export default function Form (props) {
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
+  //clears the student and interviewer
   const Reset = () => {
     setStudent("");
     setInterviewer(null);
   };
 
+  //calls onCancel to set transition to back and resets the form
   const Cancel = () => {
     Reset();
     props.onCancel();
   };
 
-  // function validate() {
-  //   if (student === "") {
-  //     setError("Student name cannot be blank");
-  //     return;
-  //   }
-
-  //   if (interviewer === null) {
-  //     setError("Please select an interviewer");
-  //     return;
-  //   }
-
-  //   setError("");
-  //   props.onSave(student, interviewer);
-  // }
-
+  //for testing to validate if student/interviewer is null
   function validate() {
     if (student === "") {
       setError("Student name cannot be blank");
